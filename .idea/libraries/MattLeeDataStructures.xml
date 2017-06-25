@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="MattLeeDataStructures">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../MattLeeDataStructures.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
