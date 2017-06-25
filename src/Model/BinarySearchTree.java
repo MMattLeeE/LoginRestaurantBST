@@ -1,12 +1,14 @@
 package Model;
 
+import MyDataStructures.Implementations.NodeIndexed;
+
 /**
  * Created by Matt on 6/25/2017.
  */
-public class BinarySearchTree<E> {
-    public void add() {
+public class BinarySearchTree<E extends Comparable<E>> {
+    NodeIndexed<E> root = null;
 
-    }
+    public void add(E object) {}
     public E Remove(){
         return null;
     }
@@ -25,9 +27,7 @@ public class BinarySearchTree<E> {
     public E get(){
         return null;
     }
-    public void reset(){
-
-    }
+    public void reset(){}
     public E getNext(){
         return null;
     }

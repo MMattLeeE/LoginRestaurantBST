@@ -93,7 +93,7 @@ public class ControllerLogin implements Initializable {
                 //set the current user in UserCurrent.java so that the user data can be read by ControllerUserPage.java
                 UserCurrent.setCurrentUser(user);
                 try {
-                    LoadPage.loadUserPage(event);
+                    LoadPage.loadRestaurantSearchPage(event);
                 } catch (IOException ex) {
                     System.err.println("problem loading user page");
                 }

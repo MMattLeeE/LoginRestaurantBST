@@ -38,7 +38,7 @@ public class ControllerUserPage implements Initializable{
 
         logoutBtn.setOnAction(e -> {
             try {
-                LoadPage.loadLoginPage(e);
+                LoadPage.loadRestaurantSearchPage(e);
             } catch (IOException ex) {
                 System.err.println("Issue going back to login page");
             }
