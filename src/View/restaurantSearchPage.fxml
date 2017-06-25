@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="402.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ControllerRestaurantSearchPage">
+<AnchorPane prefHeight="402.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ControllerRestaurantSearchPage">
    <children>
       <Button fx:id="UserInfoBtn" layoutX="224.0" layoutY="345.0" mnemonicParsing="false" text="User Info" />
       <TableView layoutX="17.0" layoutY="52.0" prefHeight="282.0" prefWidth="566.0">
