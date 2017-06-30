@@ -9,14 +9,21 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <AnchorPane prefHeight="687.0" prefWidth="971.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ControllerRestaurantSearchPage">
    <children>
       <Button fx:id="UserInfoBtn" layoutX="773.0" layoutY="629.0" mnemonicParsing="false" text="User Info" />
-      <TableView layoutX="17.0" layoutY="52.0" prefHeight="617.0" prefWidth="300.0">
+
+      <TableView fx:id="restaurantTable" layoutX="17.0" layoutY="52.0" prefHeight="617.0" prefWidth="300.0">
         <columns>
-          <TableColumn prefWidth="300.0" text="Restaurant List" />
+          <TableColumn fx:id="restaurantNameCol" prefWidth="300.0" text="Restaurant List">
+             <cellValueFactory>
+                <PropertyValueFactory property="restaurantName" />
+             </cellValueFactory>
+          </TableColumn>
         </columns>
       </TableView>
+
       <Label layoutX="751.0" layoutY="14.0" text="Restaurant Search">
          <font>
             <Font name="System Bold" size="24.0" />
