@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="MattLeeDataStructures">
+  <library name="LoginCustomStructures">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../MattLeeDataStructures.jar!/" />
+      <root url="jar://$PROJECT_DIR$/LoginCustomStructures.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

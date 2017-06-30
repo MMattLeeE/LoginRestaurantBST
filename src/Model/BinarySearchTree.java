@@ -41,6 +41,7 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
     @Override
     public void add (E element) {
         root = recAdd(element, root);
+
     }
     private NodeIndexed<E> recAdd(E element, NodeIndexed<E> treeNode) {
         if (treeNode == null)
@@ -198,6 +199,7 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
         }
 
         BinarySearchTree<E> newTree = new BinarySearchTree<>();
+        newTree.holdArray = this.holdArray;
         newTree.insertTree(0,count - 1);
 
         this.setRoot(newTree.getRoot()); //set the new balanced tree to the original tree
@@ -217,18 +219,26 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
     }
 
     public void printTreeStructure() {
+        System.out.println();
         recursivePrintTreeStructure(this.root,0);
+        System.out.println();
     }
     private void recursivePrintTreeStructure(NodeIndexed<E> root, int level) {
         if(root==null) {
-            return;
+            if(level!=0) {
+                for (int i = 0; i < level - 1; i++) {
+                    System.out.print("|       ");
+                }
+                System.out.println("|-------EMPTY");
+                return;
+            }
         }
 
         recursivePrintTreeStructure(root.getRight(), level+1);
 
         if(level!=0){
             for(int i=0;i<level-1;i++) {
-                System.out.print("|\t"+"\t");
+                System.out.print("|       ");
             }
             System.out.println("|-------" + root.getInfo());
         } else {
@@ -236,7 +246,21 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
         }
         recursivePrintTreeStructure(root.getLeft(), level+1);
     }
+
+    @Override
+    public String toString() {
+        if (root != null) {
+            return recursiveToString(root);
+        } else {
+            return "null";
+        }
+    }
+    private String recursiveToString(NodeIndexed<E> root) {
+        StringBuilder builder = new StringBuilder();
+        if (root == null)
+            return "";
+        builder.append(recursiveToString(root.getLeft()));
+        builder.append(recursiveToString(root.getRight()));
+        return builder.append(root.getInfo().toString()).toString();
+    }
 }
-
-
-
