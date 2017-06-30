@@ -9,7 +9,6 @@ public class Restaurant {
     private float[] restaurantLocation;
     private String restaurantPhoneNumber;
     private String restaurantImage;
-    private String restaurantGUI;
 
     public String getRestaurantName() {
         return restaurantName;
@@ -49,14 +48,6 @@ public class Restaurant {
 
     public void setRestaurantImage(String restaurantImage) {
         this.restaurantImage = restaurantImage;
-    }
-
-    public String getRestaurantGUI() {
-        return restaurantGUI;
-    }
-
-    public void setRestaurantGUI(String restaurantGUI) {
-        this.restaurantGUI = restaurantGUI;
     }
 
 }
