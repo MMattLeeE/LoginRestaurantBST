@@ -41,6 +41,15 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
     @Override
     public void add (E element) {
         root = recAdd(element, root);
+        try {
+            this.balanceTree();
+        } catch (QueueUnderFlowException e) {
+            e.printStackTrace();
+        } catch (ListElementDuplicate listElementDuplicate) {
+            listElementDuplicate.printStackTrace();
+        } catch (ListIndexOutOfBounds listIndexOutOfBounds) {
+            listIndexOutOfBounds.printStackTrace();
+        }
 
     }
     private NodeIndexed<E> recAdd(E element, NodeIndexed<E> treeNode) {
@@ -51,6 +60,10 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
         else
             treeNode.setRight(recAdd(element, treeNode.getRight()));
         return treeNode;
+    }
+
+    private void balanceAdd(E element) {
+        root = recAdd(element, root);
     }
 
     @Override
@@ -206,13 +219,13 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
     }
     private void insertTree(int low, int high) throws ListIndexOutOfBounds{
         if (low == high) {
-            this.add(holdArray.get(low));
+            this.balanceAdd(holdArray.get(low));
         } else if((low + 1) == high) {
-            this.add(holdArray.get(low));
-            this.add(holdArray.get(high));
+            this.balanceAdd(holdArray.get(low));
+            this.balanceAdd(holdArray.get(high));
         } else {
             int mid = (low + high)/2;
-            this.add(holdArray.get(mid));
+            this.balanceAdd(holdArray.get(mid));
             this.insertTree(low, mid - 1);
             this.insertTree(mid + 1, high);
         }
