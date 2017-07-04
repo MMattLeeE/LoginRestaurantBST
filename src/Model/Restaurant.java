@@ -13,11 +13,7 @@ public class Restaurant implements Serializable, Comparable<Restaurant> {
     private String restaurantImage;
 
     public Restaurant() {
-        setRestaurantName("testRestaurant");
-        setRestaurantAddress("111 test adress rd testCity VA 22221");
-        setRestaurantLocation(new double[]{38.833596, -77.234517});
-        setRestaurantPhoneNumber("7039123434");
-        setRestaurantImage("testImg");
+
     }
     public Restaurant(String name, String address, double[] location, String number, String image) {
         setRestaurantName(name);
