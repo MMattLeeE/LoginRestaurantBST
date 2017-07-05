@@ -18,7 +18,7 @@ import java.util.Iterator;
  */
 public class RestaurantExcelReader {
     public static String addressString = "";
-    public static double[] loc = {0, 0};
+
     public static DataFormatter fmt = new DataFormatter();
 
     public static BinarySearchTree<Restaurant> readExcel(String theExcelFile) throws IOException {
@@ -38,6 +38,7 @@ public class RestaurantExcelReader {
             Row nextRow = iterator.next();
             Iterator<Cell> cellIterator = nextRow.cellIterator();
             Restaurant aRestaurant = new Restaurant();
+            double[] loc = {0, 0};
 
             while(cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
@@ -68,9 +69,9 @@ public class RestaurantExcelReader {
                     case 6: //latitude
                         if (getCellValue(cell) == null) {
                             loc[0] = 0;
-                           // System.out.println("latitude for " + aRestaurant.getRestaurantName() + " is null");
+                            //System.out.println("latitude for " + aRestaurant.getRestaurantName() + " is null");
                         } else {
-                            loc[0] = Double.parseDouble((String) getCellValue(cell));
+                            loc[0] = Double.parseDouble((String)getCellValue(cell));
                         }
                         break;
                     case 7: //longitude
@@ -95,7 +96,7 @@ public class RestaurantExcelReader {
                 }
             }//end cells of row iteration while
 
-            //System.out.println("This is the name of the restaurant before being put in: " + aRestaurant.getRestaurantName());
+           // System.out.println("This is the name of the restaurant before being put in: " + aRestaurant.getRestaurantName());
             if (aRestaurant.getRestaurantName() != null) {
                 restaurantBST.add(aRestaurant);
                 //System.out.println("The restaurant " + aRestaurant.getRestaurantName() + " was added successfully!");
@@ -107,6 +108,7 @@ public class RestaurantExcelReader {
         workbook.close();
         inputStream.close();
 
+       // restaurantBST.printTreeStructure();
         return restaurantBST;
     }
 

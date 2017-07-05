@@ -5,6 +5,7 @@ import Model.Restaurant;
 import Model.RestaurantDB;
 import MyDataStructures.Exceptions.QueueUnderFlowException;
 import MyDataStructures.Implementations.List.ListIndexed;
+import MyDataStructures.Implementations.NodeIndexed;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.fxml.Initializable;
@@ -22,6 +23,12 @@ import java.util.ResourceBundle;
  */
 public class ControllerRestaurantSearchPage implements Initializable {
 
+    public Label Name;
+    public Label Address;
+    public Label Lat;
+    public Label Long;
+    public Label Phone;
+
     @FXML private Label restaurantNameOutput;
     @FXML private Label restaurantAddressOutput;
     @FXML private Label restaurantLatitudeOutput;
@@ -38,11 +45,14 @@ public class ControllerRestaurantSearchPage implements Initializable {
     @FXML private TableView<Restaurant> restaurantTable;
     @FXML private TableColumn<Restaurant, String> restaurantNameCol;
 
+    private ArrayList<Restaurant> searchArray;
+    private ArrayList<Restaurant> tempList;
+    private BinarySearchTree<Restaurant> bst;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        BinarySearchTree<Restaurant> bst = RestaurantDB.getRestaurantsDB();
-        ArrayList<Restaurant> tempList = new ArrayList<>();
+        bst = RestaurantDB.getRestaurantsDB();
+        tempList = new ArrayList<>();
         bst.reset(BinarySearchTree.INORDER);
 
         for (int i=0; i<bst.size(); i++) {
@@ -61,6 +71,10 @@ public class ControllerRestaurantSearchPage implements Initializable {
             if (restaurantTable.getSelectionModel().getSelectedItem() != null) {
                 displayRestaurantData(newSelection);
             }
+        });
+
+        searchBtn.setOnAction(e -> {
+            searchRestaurants();
         });
 
         //When user info button is pressed
@@ -86,9 +100,8 @@ public class ControllerRestaurantSearchPage implements Initializable {
         restaurantNameOutput.setText(currentSelected.getRestaurantName());
         restaurantAddressOutput.setText(currentSelected.getRestaurantAddress());
 
-        double[] temp = currentSelected.getRestaurantLocation();
-        restaurantLatitudeOutput.setText(Double.toString(temp[0]));
-        restaurantLongitudeOutput.setText(Double.toString(temp[1]));
+        restaurantLatitudeOutput.setText(Double.toString(currentSelected.getRestaurantLocation()[0]));
+        restaurantLongitudeOutput.setText(Double.toString(currentSelected.getRestaurantLocation()[1]));
 
         restaurantPhoneNumberOutput.setText(currentSelected.getRestaurantPhoneNumber());
 
@@ -101,6 +114,84 @@ public class ControllerRestaurantSearchPage implements Initializable {
         restaurantLongitudeOutput.setVisible(true);
         restaurantPhoneNumberOutput.setVisible(true);
         restaurantImageView.setVisible(true);
+
+        Name.setVisible(true);
+        Address.setVisible(true);
+        Lat.setVisible(true);
+        Long.setVisible(true);
+        Phone.setVisible(true);
     }
 
+    private void searchRestaurants() {
+        String searchQuery = searchTextField.getText().toLowerCase();
+
+        searchArray = new ArrayList<>();
+
+        String currentName;
+        String currentAddress;
+        String currentLat;
+        String currentLong;
+        String currentPhone;
+
+        for (int i =0; i < tempList.size(); i++) {
+            currentName = tempList.get(i).getRestaurantName().toLowerCase();
+            currentAddress = tempList.get(i).getRestaurantAddress().toLowerCase();
+            currentLat = Double.toString(tempList.get(i).getRestaurantLocation()[0]);
+            currentLong = Double.toString(tempList.get(i).getRestaurantLocation()[1]);
+            currentPhone = tempList.get(i).getRestaurantPhoneNumber().toLowerCase();
+
+            if (currentName.contains(searchQuery) ||
+                    currentAddress.contains(searchQuery) ||
+                    orderContainString(searchQuery,currentLat) ||
+                    orderContainString(searchQuery,currentLong) ||
+                    orderContainString(searchQuery,currentPhone)) {
+                searchArray.add(tempList.get(i));
+            }
+
+        }
+
+        restaurantTable.getItems().setAll(searchArray);
+
+        searchTextField.clear();
+
+        restaurantNameOutput.setVisible(false);
+        restaurantAddressOutput.setVisible(false);
+        restaurantLatitudeOutput.setVisible(false);
+        restaurantLongitudeOutput.setVisible(false);
+        restaurantPhoneNumberOutput.setVisible(false);
+        restaurantImageView.setVisible(false);
+
+        Name.setVisible(false);
+        Address.setVisible(false);
+        Lat.setVisible(false);
+        Long.setVisible(false);
+        Phone.setVisible(false);
+
+    }
+
+    public boolean orderContainString(String query, String checked) {//check the strings in order from the beginning.
+        boolean output = false;
+        if(query.length() > checked.length()) { //if the substring that is being looked for is larger than the string it is being looked for in it
+            output = false;
+        } else {
+            boolean end = false;
+            int index = 0;
+
+            while (!end) {//ends if there is a mismatch for a character or if the last query character has been compared.
+                if (checked.charAt(index)==query.charAt(index)){//if the character is a match
+                    index++;
+
+                    if (index == query.length()) {//if the last character of the query is checked and matches
+                        output = true;
+                        end = true;
+                    }
+
+                } else {
+                    end = true;
+                    output = false;
+                }
+            }
+        }
+        return output;
+    }
 }

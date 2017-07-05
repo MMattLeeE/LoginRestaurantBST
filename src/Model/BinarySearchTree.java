@@ -8,13 +8,16 @@ import MyDataStructures.Implementations.List.ListIndexed;
 import MyDataStructures.Implementations.NodeIndexed;
 import MyDataStructures.Implementations.Queue.QueueUnbounded;
 
+import java.util.ArrayList;
+
 /**
  * Created by Matt on 6/25/2017.
  */
 public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchTree<E> {
     NodeIndexed<E> root = null;
     boolean found;
-    ListIndexed<E> holdArray;
+    ArrayList<E> holdArray;
+    ArrayList<E> searchArray;
 
     public static final int INORDER = 1;
     public static final int PREORDER = 2;
@@ -211,11 +214,11 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
     }
 
     public void balanceTree() throws QueueUnderFlowException, ListElementDuplicate, ListIndexOutOfBounds {
-        int count = this.reset(INORDER);
-        holdArray = new ListIndexed<>();
+        int count = reset(INORDER);
+        holdArray = new ArrayList<>();
 
         for (int index = 0; index < count; index++) {
-            holdArray.add(index,this.getNext(INORDER));
+            holdArray.add(getNext(INORDER));
         }
 
         BinarySearchTree<E> newTree = new BinarySearchTree<>();
@@ -283,4 +286,5 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
         builder.append(recursiveToString(root.getRight()));
         return builder.append(root.getInfo().toString()).toString();
     }
+
 }

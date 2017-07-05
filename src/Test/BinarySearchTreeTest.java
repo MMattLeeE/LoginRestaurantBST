@@ -1,6 +1,7 @@
 package Test;
 
 import Model.BinarySearchTree;
+import Model.Restaurant;
 import org.junit.Test;
 
 import static Model.BinarySearchTree.INORDER;
@@ -87,5 +88,18 @@ public class BinarySearchTreeTest {
     public void toStringTest() throws Exception {
         addTestValues();
         System.out.println(testBST.toString());
+    }
+
+    @Test
+    public void compareToTest() throws Exception {
+        Restaurant test1 = new Restaurant("test","testaddress",new double[]{38.7517314,-77.4727505},"testphone","testimage");
+        Restaurant test2 = new Restaurant("test2","testaddress2",new double[]{39.052466,-77.453372},"testphone2","testimage2");
+        Restaurant test3 = new Restaurant("test2","testaddress2",new double[]{39.052466,-77.453372},"testphone2","testimage2");
+
+        System.out.println(test1.compareTo(test2));
+        System.out.println(test2.compareTo(test1));
+        System.out.println(test2.compareTo(test3));
+
+        System.out.println(Double.toString(test2.getRestaurantLocation()[0]));
     }
 }

@@ -35,31 +35,31 @@
 
       <ImageView fx:id="restaurantImageView" fitHeight="322.0" fitWidth="583.0" layoutX="359.0" layoutY="64.0" pickOnBounds="true" />
 
-      <Label layoutX="355.0" layoutY="419.0" text="Restaurant Name:">
+      <Label fx:id="Name" layoutX="355.0" layoutY="419.0" text="Restaurant Name:" visible="false">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
 
-      <Label layoutX="358.0" layoutY="456.0" text="Address:">
+      <Label fx:id="Address" layoutX="358.0" layoutY="456.0" text="Address:" visible="false">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
 
-      <Label layoutX="358.0" layoutY="494.0" text="Latitude:">
+      <Label fx:id="Lat" layoutX="358.0" layoutY="494.0" text="Latitude:" visible="false">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
 
-      <Label layoutX="358.0" layoutY="529.0" text="Longitude:">
+      <Label fx:id="Long" layoutX="358.0" layoutY="529.0" text="Longitude:" visible="false">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
 
-      <Label layoutX="355.0" layoutY="565.0" text="Phone Number:">
+      <Label fx:id="Phone" layoutX="355.0" layoutY="565.0" text="Phone Number:" visible="false">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>

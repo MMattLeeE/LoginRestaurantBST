@@ -66,13 +66,16 @@ public class Restaurant implements Serializable, Comparable<Restaurant> {
         return " " + restaurantName + " " + restaurantAddress + " " + restaurantLocation[0] + ", " + restaurantLocation[1] + " " + restaurantPhoneNumber + " " + restaurantImage;
     }
 
+    //determine how restaurants are sorted on bst. Currently by latitude.
     @Override
     public int compareTo(Restaurant o) {
         int tempCompare;
-        if (this.restaurantName.compareTo(o.restaurantName)==0) { //if the restaurants have the same name; like a chain
-            tempCompare = this.restaurantAddress.compareTo(o.restaurantAddress); //compare the addresses
+        if ((this.restaurantLocation[0] - o.restaurantLocation[0])==0) { //if the restaurants have the same name; like a chain
+            tempCompare = 0;
+        } else if (this.restaurantLocation[0] < o.restaurantLocation[0]){
+            tempCompare = (int) ((this.restaurantLocation[0]-o.restaurantLocation[0])*110.574);
         } else {
-            tempCompare = this.restaurantName.compareTo(o.restaurantName);
+            tempCompare = (int) ((this.restaurantLocation[0]-o.restaurantLocation[0])*110.574);
         }
         return tempCompare;
     }
