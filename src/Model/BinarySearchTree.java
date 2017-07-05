@@ -52,16 +52,6 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
     @Override
     public void add (E element) {
         root = recAdd(element, root);
-        try {
-            this.balanceTree();
-        } catch (QueueUnderFlowException e) {
-            e.printStackTrace();
-        } catch (ListElementDuplicate listElementDuplicate) {
-            listElementDuplicate.printStackTrace();
-        } catch (ListIndexOutOfBounds listIndexOutOfBounds) {
-            listIndexOutOfBounds.printStackTrace();
-        }
-
     }
     private void balanceAdd(E element) {
         root = recAdd(element, root);

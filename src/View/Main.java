@@ -2,6 +2,9 @@ package View;
 
 import Model.*;
 
+import MyDataStructures.Exceptions.ListElementDuplicate;
+import MyDataStructures.Exceptions.ListIndexOutOfBounds;
+import MyDataStructures.Exceptions.QueueUnderFlowException;
 import MyDataStructures.Implementations.List.ListOrdered;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -37,7 +40,6 @@ public class Main extends Application{
         try{
             UserDB.setUsersArrayList((ListOrdered<User>) UserIO.readUsers());
             UserDB.printOrderedList();
-
             System.out.println();
         } catch(IOException e) {
             System.err.print("Can't read/open users.dat file");
@@ -49,11 +51,22 @@ public class Main extends Application{
 
     private void loadRestaurantsDB() {
         String filePath = "C:\\Users\\Matt\\Desktop\\restaurantList.xlsx";
+
         try {
             RestaurantDB.setRestaurantsDB(RestaurantExcelReader.readExcel(filePath));
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Cant load Excel file....");
+        }
+
+        try {
+            RestaurantDB.getRestaurantsDB().balanceTree();
+        } catch (QueueUnderFlowException e) {
+            e.printStackTrace();
+        } catch (ListElementDuplicate listElementDuplicate) {
+            listElementDuplicate.printStackTrace();
+        } catch (ListIndexOutOfBounds listIndexOutOfBounds) {
+            listIndexOutOfBounds.printStackTrace();
         }
     }
 
