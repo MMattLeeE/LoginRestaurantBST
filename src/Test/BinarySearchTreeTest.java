@@ -1,5 +1,6 @@
-package Model;
+package Test;
 
+import Model.BinarySearchTree;
 import org.junit.Test;
 
 import static Model.BinarySearchTree.INORDER;
@@ -65,7 +66,7 @@ public class BinarySearchTreeTest {
     public void resetTest() throws Exception {
         addTestValues();
         assertEquals(13,testBST.reset(INORDER));
-        System.out.println(testBST.inOrderQueue);
+        System.out.println(testBST.getInOrderQueue());
     }
 
     @Test

@@ -1,8 +1,6 @@
 package View;
 
-import Model.User;
-import Model.UserDB;
-import Model.UserIO;
+import Model.*;
 
 import MyDataStructures.Implementations.List.ListOrdered;
 import javafx.application.Application;
@@ -23,6 +21,7 @@ public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         loadUserDB();
+        loadRestaurantsDB();
 
         Parent root = FXMLLoader.load(getClass().getResource("/View/loginPage.fxml"));
 
@@ -45,6 +44,16 @@ public class Main extends Application{
         } catch(ClassNotFoundException e) {
             System.err.print("Class not found...");
             e.printStackTrace();
+        }
+    }
+
+    private void loadRestaurantsDB() {
+        String filePath = "C:\\Users\\Matt\\Desktop\\restaurantList.xlsx";
+        try {
+            RestaurantDB.setRestaurantsDB(RestaurantExcelReader.readExcel(filePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Cant load Excel file....");
         }
     }
 

@@ -1,6 +1,9 @@
 package Controller;
 
+import Model.BinarySearchTree;
 import Model.Restaurant;
+import Model.RestaurantDB;
+import MyDataStructures.Exceptions.QueueUnderFlowException;
 import MyDataStructures.Implementations.List.ListIndexed;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -38,14 +41,20 @@ public class ControllerRestaurantSearchPage implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        BinarySearchTree<Restaurant> bst = RestaurantDB.getRestaurantsDB();
+        ArrayList<Restaurant> tempList = new ArrayList<>();
+        bst.reset(BinarySearchTree.INORDER);
 
-        ArrayList<Restaurant> testList = new ArrayList<>();
-        testList.add(new Restaurant());
-        testList.add(new Restaurant("Someplace","222 someplace ct test test 221122",new double[]{-1.111, 1.222},"4324443322","testImg"));
-        testList.add(new Restaurant());
-        testList.add(new Restaurant());
+        for (int i=0; i<bst.size(); i++) {
+            try {
+                tempList.add(bst.getNext(BinarySearchTree.INORDER));
+            } catch (QueueUnderFlowException e) {
+                e.printStackTrace();
+                System.err.println("Binary Search Tree inorder queue is empty...");
+            }
+        }
 
-        restaurantTable.getItems().setAll(testList);
+        restaurantTable.getItems().setAll(tempList);
 
         //change listener for when a restaurant is selected on list...
         restaurantTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -73,7 +82,7 @@ public class ControllerRestaurantSearchPage implements Initializable {
         });
     }
 
-    public void displayRestaurantData(Restaurant currentSelected) {
+    private void displayRestaurantData(Restaurant currentSelected) {
         restaurantNameOutput.setText(currentSelected.getRestaurantName());
         restaurantAddressOutput.setText(currentSelected.getRestaurantAddress());
 
@@ -83,7 +92,7 @@ public class ControllerRestaurantSearchPage implements Initializable {
 
         restaurantPhoneNumberOutput.setText(currentSelected.getRestaurantPhoneNumber());
 
-        Image image = new Image("file:" + currentSelected.getRestaurantImage(),583,322,true,false);
+        Image image = new Image(currentSelected.getRestaurantImage(),583,322,true,false);
         restaurantImageView.setImage(image);
 
         restaurantNameOutput.setVisible(true);

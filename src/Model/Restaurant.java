@@ -62,9 +62,19 @@ public class Restaurant implements Serializable, Comparable<Restaurant> {
         this.restaurantImage = restaurantImage;
     }
 
+    public String toString() {
+        return " " + restaurantName + " " + restaurantAddress + " " + restaurantLocation[0] + ", " + restaurantLocation[1] + " " + restaurantPhoneNumber + " " + restaurantImage;
+    }
+
     @Override
     public int compareTo(Restaurant o) {
-        return this.restaurantName.compareTo(o.restaurantName);
+        int tempCompare;
+        if (this.restaurantName.compareTo(o.restaurantName)==0) { //if the restaurants have the same name; like a chain
+            tempCompare = this.restaurantAddress.compareTo(o.restaurantAddress); //compare the addresses
+        } else {
+            tempCompare = this.restaurantName.compareTo(o.restaurantName);
+        }
+        return tempCompare;
     }
 }
 

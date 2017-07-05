@@ -16,8 +16,6 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
     boolean found;
     ListIndexed<E> holdArray;
 
-    String treeString;
-
     public static final int INORDER = 1;
     public static final int PREORDER = 2;
     public static final int POSTORDER = 3;
@@ -32,6 +30,16 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
 
     public NodeIndexed<E> getRoot() {
         return root;
+    }
+
+    public QueueUnbounded<E> getInOrderQueue() {
+        return inOrderQueue;
+    }
+    public QueueUnbounded<E> getPreOrderQueue() {
+        return preOrderQueue;
+    }
+    public QueueUnbounded<E> getPostOrderQueue() {
+        return postOrderQueue;
     }
 
     public void setRoot(NodeIndexed<E> newRoot) {
@@ -52,6 +60,9 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
         }
 
     }
+    private void balanceAdd(E element) {
+        root = recAdd(element, root);
+    }
     private NodeIndexed<E> recAdd(E element, NodeIndexed<E> treeNode) {
         if (treeNode == null)
             treeNode = new NodeIndexed<>(element);
@@ -60,10 +71,6 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
         else
             treeNode.setRight(recAdd(element, treeNode.getRight()));
         return treeNode;
-    }
-
-    private void balanceAdd(E element) {
-        root = recAdd(element, root);
     }
 
     @Override

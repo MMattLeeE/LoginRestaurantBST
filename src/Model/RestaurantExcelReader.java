@@ -16,13 +16,13 @@ import java.util.Iterator;
 /**
  * Created by Matt on 7/2/2017.
  */
-public class ExcelReader {
+public class RestaurantExcelReader {
     public static String addressString = "";
     public static double[] loc = {0, 0};
-    public DataFormatter fmt = new DataFormatter();
+    public static DataFormatter fmt = new DataFormatter();
 
-    public ListOrdered<Restaurant> readExcel(String theExcelFile) throws IOException {
-        ListOrdered<Restaurant> listRestaurants = new ListOrdered<>();
+    public static BinarySearchTree<Restaurant> readExcel(String theExcelFile) throws IOException {
+        BinarySearchTree<Restaurant> restaurantBST = new BinarySearchTree<>();
         FileInputStream inputStream = new FileInputStream(new File(theExcelFile));
 
         Workbook workbook = getWorkbook(inputStream, theExcelFile);
@@ -46,7 +46,7 @@ public class ExcelReader {
                 switch (columnIndex) {
                     case 1: //restaurant name
                         aRestaurant.setRestaurantName((String) getCellValue(cell));
-                        System.out.println(aRestaurant.getRestaurantName());
+                        //System.out.println(aRestaurant.getRestaurantName());
                         break;
                     case 2: //street
                         addressString = (String) getCellValue(cell);
@@ -63,12 +63,12 @@ public class ExcelReader {
                     case 5: //zip
                         addressString += " " + getCellValue(cell);
                         aRestaurant.setRestaurantAddress(addressString);
-                        System.out.println(aRestaurant.getRestaurantAddress());
+                        //System.out.println(aRestaurant.getRestaurantAddress());
                         break;
                     case 6: //latitude
                         if (getCellValue(cell) == null) {
                             loc[0] = 0;
-                            System.out.println("latitude for " + aRestaurant.getRestaurantName() + " is null");
+                           // System.out.println("latitude for " + aRestaurant.getRestaurantName() + " is null");
                         } else {
                             loc[0] = Double.parseDouble((String) getCellValue(cell));
                         }
@@ -76,33 +76,29 @@ public class ExcelReader {
                     case 7: //longitude
                         if (getCellValue(cell) == null) {
                             loc[1] = 0;
-                            System.out.println("longitude for " + aRestaurant.getRestaurantName() + " is null");
+                            //System.out.println("longitude for " + aRestaurant.getRestaurantName() + " is null");
                             aRestaurant.setRestaurantLocation(loc);
                         } else {
                             loc[1] = Double.parseDouble((String) getCellValue(cell));
                             aRestaurant.setRestaurantLocation(loc);
                         }
-                        System.out.println(aRestaurant.getRestaurantLocation()[0] + ", " + aRestaurant.getRestaurantLocation()[1]);
+                        //System.out.println(aRestaurant.getRestaurantLocation()[0] + ", " + aRestaurant.getRestaurantLocation()[1]);
                         break;
                     case 8: //phone number
                         aRestaurant.setRestaurantPhoneNumber((String) getCellValue(cell));
-                        System.out.println(aRestaurant.getRestaurantPhoneNumber());
+                        //System.out.println(aRestaurant.getRestaurantPhoneNumber());
                         break;
                     case 9: //image url
                         aRestaurant.setRestaurantImage((String) getCellValue(cell));
-                        System.out.println(aRestaurant.getRestaurantImage());
+                        //System.out.println(aRestaurant.getRestaurantImage());
                         break;
                 }
             }//end cells of row iteration while
 
-            System.out.println("This is the name of the restaurant before being put in: " + aRestaurant.getRestaurantName());
+            //System.out.println("This is the name of the restaurant before being put in: " + aRestaurant.getRestaurantName());
             if (aRestaurant.getRestaurantName() != null) {
-                try {
-                    listRestaurants.add(aRestaurant);
-                    System.out.println("The restaurant " + aRestaurant.getRestaurantName() + " was added successfully!");
-                } catch (ListElementDuplicate listElementDuplicate) {
-                    listElementDuplicate.printStackTrace();
-                }
+                restaurantBST.add(aRestaurant);
+                //System.out.println("The restaurant " + aRestaurant.getRestaurantName() + " was added successfully!");
             } else {
                 lastRestaurant = true;
             }
@@ -111,10 +107,10 @@ public class ExcelReader {
         workbook.close();
         inputStream.close();
 
-        return listRestaurants;
+        return restaurantBST;
     }
 
-    private Object getCellValue(Cell cell) {
+    private static Object getCellValue(Cell cell) {
         switch (cell.getCellTypeEnum()) {
             case STRING:
                 return cell.getStringCellValue();
@@ -127,7 +123,6 @@ public class ExcelReader {
         }
         return null;
     }
-
     private static Workbook getWorkbook(FileInputStream inputStream, String excelFilePath) throws IOException {
         Workbook workbook = null;
 
