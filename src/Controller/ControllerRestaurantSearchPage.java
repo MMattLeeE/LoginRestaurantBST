@@ -3,6 +3,7 @@ package Controller;
 import Model.BinarySearchTree;
 import Model.Restaurant;
 import Model.RestaurantDB;
+import MyDataStructures.Exceptions.ListIndexOutOfBounds;
 import MyDataStructures.Exceptions.QueueUnderFlowException;
 import MyDataStructures.Implementations.List.ListIndexed;
 import MyDataStructures.Implementations.NodeIndexed;
@@ -16,6 +17,8 @@ import sun.rmi.runtime.Log;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 
 /**
@@ -48,10 +51,26 @@ public class ControllerRestaurantSearchPage implements Initializable {
     private ArrayList<Restaurant> searchArray;
     private ArrayList<Restaurant> tempList;
     private BinarySearchTree<Restaurant> bst;
+    private BinarySearchTree<Restaurant> bstName;
+    private BinarySearchTree<Restaurant> bstAddress;
+    private BinarySearchTree<Restaurant> bstLongitude;
+    private BinarySearchTree<Restaurant> bstPhone;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         bst = RestaurantDB.getRestaurantsDB();
+
+        try {
+            bstName = bst.reorderBST(Restaurant.RestaurantNameComparator);
+            bstAddress = bst.reorderBST(Restaurant.RestaurantAddressComparator);
+            bstLongitude = bst.reorderBST(Restaurant.RestaurantLongitudeComparator);
+            bstPhone = bst.reorderBST(Restaurant.RestaurantPhoneComparator);
+        } catch (ListIndexOutOfBounds listIndexOutOfBounds) {
+            listIndexOutOfBounds.printStackTrace();
+        } catch (QueueUnderFlowException e) {
+            e.printStackTrace();
+        }
+
         tempList = new ArrayList<>();
         bst.reset(BinarySearchTree.INORDER);
 
@@ -127,30 +146,13 @@ public class ControllerRestaurantSearchPage implements Initializable {
 
         searchArray = new ArrayList<>();
 
-        String currentName;
-        String currentAddress;
-        String currentLat;
-        String currentLong;
-        String currentPhone;
+        recursiveSearch(bst.getRoot(),searchQuery);
 
-        for (int i =0; i < tempList.size(); i++) {
-            currentName = tempList.get(i).getRestaurantName().toLowerCase();
-            currentAddress = tempList.get(i).getRestaurantAddress().toLowerCase();
-            currentLat = Double.toString(tempList.get(i).getRestaurantLocation()[0]);
-            currentLong = Double.toString(tempList.get(i).getRestaurantLocation()[1]);
-            currentPhone = tempList.get(i).getRestaurantPhoneNumber().toLowerCase();
-
-            if (currentName.contains(searchQuery) ||
-                    currentAddress.contains(searchQuery) ||
-                    orderContainString(searchQuery,currentLat) ||
-                    orderContainString(searchQuery,currentLong) ||
-                    orderContainString(searchQuery,currentPhone)) {
-                searchArray.add(tempList.get(i));
-            }
-
+        if (searchArray.size()==0) {
+            restaurantTable.getItems().setAll(tempList);
+        } else {
+            restaurantTable.getItems().setAll(searchArray);
         }
-
-        restaurantTable.getItems().setAll(searchArray);
 
         searchTextField.clear();
 
@@ -166,7 +168,27 @@ public class ControllerRestaurantSearchPage implements Initializable {
         Lat.setVisible(false);
         Long.setVisible(false);
         Phone.setVisible(false);
+    }
 
+    public void recursiveSearch(NodeIndexed<Restaurant> node, String query) {
+        query = query.toLowerCase();
+        if (node == null || query.equals("")) {
+            return;
+        } else {
+            String currentName = node.getInfo().getRestaurantName().toLowerCase();
+            String currentAddress = node.getInfo().getRestaurantAddress().toLowerCase();
+            String currentLat = Double.toString(node.getInfo().getRestaurantLocation()[0]);
+            String currentLong = Double.toString(node.getInfo().getRestaurantLocation()[1]);
+            String currentPhone = node.getInfo().getRestaurantPhoneNumber();
+
+            if (currentName.contains(query) || currentAddress.contains(query) || orderContainString(query, currentLat) || orderContainString(query, currentLong) || currentPhone.contains(query)) { //match is found
+                searchArray.add(node.getInfo());
+            }
+
+            recursiveSearch(node.getRight(),query);
+            recursiveSearch(node.getLeft(),query);
+
+        }
     }
 
     public boolean orderContainString(String query, String checked) {//check the strings in order from the beginning.
@@ -194,4 +216,5 @@ public class ControllerRestaurantSearchPage implements Initializable {
         }
         return output;
     }
+
 }

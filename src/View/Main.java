@@ -68,6 +68,7 @@ public class Main extends Application{
         } catch (ListIndexOutOfBounds listIndexOutOfBounds) {
             listIndexOutOfBounds.printStackTrace();
         }
+        RestaurantDB.getRestaurantsDB().printTreeStructure();
     }
 
     public static void main(String[] args) {

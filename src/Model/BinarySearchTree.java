@@ -3,12 +3,15 @@ package Model;
 import MyDataStructures.Exceptions.ListElementDuplicate;
 import MyDataStructures.Exceptions.ListIndexOutOfBounds;
 import MyDataStructures.Exceptions.QueueUnderFlowException;
-import MyDataStructures.Implementations.List.ListIndexed;
 
 import MyDataStructures.Implementations.NodeIndexed;
 import MyDataStructures.Implementations.Queue.QueueUnbounded;
 
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by Matt on 6/25/2017.
@@ -17,7 +20,6 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
     NodeIndexed<E> root = null;
     boolean found;
     ArrayList<E> holdArray;
-    ArrayList<E> searchArray;
 
     public static final int INORDER = 1;
     public static final int PREORDER = 2;
@@ -53,9 +55,6 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
     public void add (E element) {
         root = recAdd(element, root);
     }
-    private void balanceAdd(E element) {
-        root = recAdd(element, root);
-    }
     private NodeIndexed<E> recAdd(E element, NodeIndexed<E> treeNode) {
         if (treeNode == null)
             treeNode = new NodeIndexed<>(element);
@@ -65,6 +64,7 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
             treeNode.setRight(recAdd(element, treeNode.getRight()));
         return treeNode;
     }
+
 
     @Override
     public E get(E element) {
@@ -219,13 +219,13 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
     }
     private void insertTree(int low, int high) throws ListIndexOutOfBounds{
         if (low == high) {
-            this.balanceAdd(holdArray.get(low));
+            this.add(holdArray.get(low));
         } else if((low + 1) == high) {
-            this.balanceAdd(holdArray.get(low));
-            this.balanceAdd(holdArray.get(high));
+            this.add(holdArray.get(low));
+            this.add(holdArray.get(high));
         } else {
             int mid = (low + high)/2;
-            this.balanceAdd(holdArray.get(mid));
+            this.add(holdArray.get(mid));
             this.insertTree(low, mid - 1);
             this.insertTree(mid + 1, high);
         }
@@ -275,6 +275,48 @@ public class BinarySearchTree<E extends Comparable<E>> implements IBinarySearchT
         builder.append(recursiveToString(root.getLeft()));
         builder.append(recursiveToString(root.getRight()));
         return builder.append(root.getInfo().toString()).toString();
+    }
+
+    public BinarySearchTree<E> reorderBST(Comparator<E> c) throws QueueUnderFlowException, ListIndexOutOfBounds {
+        int count = reset(INORDER);
+        holdArray = new ArrayList<>();
+
+        for (int index = 0; index < count; index++) {
+            holdArray.add(getNext(INORDER));
+        }
+
+        Collections.sort(holdArray,c);
+
+        BinarySearchTree<E> newTree = new BinarySearchTree<>();
+        newTree.holdArray = this.holdArray;
+        newTree.comparatorInsertTree(0,count - 1, c);
+
+        return newTree;
+    }
+    private void comparatorInsertTree(int low, int high, Comparator<E> c) throws ListIndexOutOfBounds{
+        if (low == high) {
+            this.comparatorAdd(holdArray.get(low),c);
+        } else if((low + 1) == high) {
+            this.comparatorAdd(holdArray.get(low),c);
+            this.comparatorAdd(holdArray.get(high),c);
+        } else {
+            int mid = (low + high)/2;
+            this.comparatorAdd(holdArray.get(mid),c);
+            this.comparatorInsertTree(low, mid - 1,c);
+            this.comparatorInsertTree(mid + 1, high,c);
+        }
+    }
+    private void comparatorAdd(E element, Comparator<E> c) {
+        root = comparatorRecAdd(element, root, c);
+    }
+    private NodeIndexed<E> comparatorRecAdd(E element, NodeIndexed<E> treeNode, Comparator<E> c) {
+        if (treeNode == null)
+            treeNode = new NodeIndexed<>(element);
+        else if (c.compare(element,treeNode.getInfo()) <= 0)
+            treeNode.setLeft(comparatorRecAdd(element, treeNode.getLeft(),c));
+        else
+            treeNode.setRight(comparatorRecAdd(element, treeNode.getRight(), c));
+        return treeNode;
     }
 
 }
